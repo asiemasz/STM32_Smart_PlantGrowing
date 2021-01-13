@@ -41,7 +41,8 @@ Core/Src/sensors.o: ../Core/Src/sensors.c ../Core/Inc/sensors.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb_reg.h ../Core/Inc/lcd.h \
  ../Core/Inc/i2c.h ../Core/Inc/sensors.h ../Core/Inc/usart.h \
- ../Core/Inc/tim.h
+ ../Core/Inc/tim.h ../Core/Inc/eeprom.h ../Core/Inc/keyboard.h \
+ ../Core/Inc/gpio.h
 
 ../Core/Inc/sensors.h:
 
@@ -144,3 +145,9 @@ Core/Src/sensors.o: ../Core/Src/sensors.c ../Core/Inc/sensors.h \
 ../Core/Inc/usart.h:
 
 ../Core/Inc/tim.h:
+
+../Core/Inc/eeprom.h:
+
+../Core/Inc/keyboard.h:
+
+../Core/Inc/gpio.h:

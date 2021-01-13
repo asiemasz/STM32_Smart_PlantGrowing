@@ -100,6 +100,11 @@
 
 /* Variables' number */
 #define NB_OF_VAR             ((uint8_t)4)
+#define MIN_HUM_ADDR		  1
+#define MAX_HUM_ADDR		  2
+#define MIN_TEMP_ADDR         3
+#define MAX_TEMP_ADDR         4
+
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/

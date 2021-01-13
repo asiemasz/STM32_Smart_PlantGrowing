@@ -67,6 +67,8 @@ void lcd_display(struct lcd_disp * lcd){
 }
 
 void lcd_clear(struct lcd_disp * lcd){
+	 sprintf((char *)disp.f_line, " ");
+	 sprintf((char *)disp.s_line, " ");
 	uint8_t xpin = 0;
 	if(lcd->bl)
 	{

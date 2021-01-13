@@ -61,7 +61,7 @@ uint16_t VirtAddVarTab[NB_OF_VAR];
 struct lcd_disp disp;
 uint8_t alert_mode = 0;
 uint8_t setting_mode = 0;
-
+uint16_t p;
 volatile uint32_t delay_counter = 0;
 /* USER CODE END PV */
 
@@ -125,12 +125,30 @@ int main(void)
   lcd_display(&disp);
   HAL_Delay(500);
   lcd_clear(&disp);
-  sprintf((char *)disp.f_line, " ");
-  sprintf((char *)disp.s_line, " ");
+
 
   HAL_FLASH_Unlock();
   if(EE_Init() != HAL_OK){
 	  Error_Handler();
+  }
+
+  if(EE_ReadVariable(MIN_HUM_ADDR, &p) == 1){
+	  sprintf((char *)disp.f_line,"Loading initial ");
+	  sprintf((char *)disp.s_line,"settings.");
+	  lcd_display(&disp);
+	  data_setting_save();
+	  HAL_Delay(3000);
+	  lcd_clear(&disp);
+	  data_setting_print();
+
+  }
+  else{
+	  sprintf((char *)disp.f_line,"Loading settings");
+	  sprintf((char *)disp.s_line,"from memory.");
+	  data_setting_load();
+	  HAL_Delay(3000);
+	  lcd_clear(&disp);
+	  data_setting_print();
   }
 
 
@@ -151,6 +169,7 @@ int main(void)
 		lcd_display(&disp);
 	else{
 		data_setting_enter();
+		data_setting_save();
 		setting_mode = 0;
 	}
   }

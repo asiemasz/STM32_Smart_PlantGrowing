@@ -15,10 +15,32 @@ data setting_min;
 data setting_max;
 
 void data_setting_init(){
-	setting_min.humid = 55.00;
+	setting_min.humid = 50.00;
 	setting_min.temp = 18.00;
 	setting_max.humid = 70.00;
-	setting_max.temp = 25.00;
+	setting_max.temp = 30.00;
+}
+
+void data_setting_save(){
+	EE_WriteVariable(MIN_HUM_ADDR, (uint16_t) setting_min.humid);
+	EE_WriteVariable(MAX_HUM_ADDR, (uint16_t) setting_max.humid);
+	EE_WriteVariable(MIN_TEMP_ADDR, (uint16_t) setting_min.temp);
+	EE_WriteVariable(MAX_TEMP_ADDR, (uint16_t) setting_max.temp);
+}
+
+void data_setting_load(){
+	uint16_t buf;
+	EE_ReadVariable(MIN_HUM_ADDR, &buf);
+	setting_min.humid = (float) buf;
+
+	EE_ReadVariable(MAX_HUM_ADDR, &buf);
+	setting_max.humid = (float) buf;
+
+	EE_ReadVariable(MIN_TEMP_ADDR, &buf);
+	setting_min.temp = (float) buf;
+
+	EE_ReadVariable(MAX_TEMP_ADDR, &buf);
+	setting_max.temp = (float) buf;
 }
 
 void data_setting_enter(){
@@ -30,11 +52,12 @@ void data_setting_enter(){
 	usart_send_string("Setting mode...");
 	lcd_display(&disp);
 	HAL_Delay(2000);
+	lcd_clear(&disp);
+
 	int i;
 
 	sprintf((char *)disp.f_line,"Min. humid.: ");
 	sprintf((char *)disp.s_line,"");
-	lcd_clear(&disp);
 	lcd_display(&disp);
 	for(i=0 ; i<4 ; i++){
 		key = kb_service();
@@ -52,7 +75,6 @@ void data_setting_enter(){
 
 	sprintf((char *)disp.f_line,"Max. humid.: ");
 	sprintf((char *)disp.s_line,"");
-	lcd_clear(&disp);
 	lcd_display(&disp);
 	for(i=0 ; i<4 ; i++){
 		key = kb_service();
@@ -64,12 +86,12 @@ void data_setting_enter(){
 		s += 10.0/powf(10.0,(float)i) * (float)key;
 		HAL_Delay(100);
 	}
+	lcd_clear(&disp);
 	setting_max.humid = s;
 	s=0;
 
 	sprintf((char *)disp.f_line,"Min. temp.: ");
 	sprintf((char *)disp.s_line,"");
-	lcd_clear(&disp);
 	lcd_display(&disp);
 	for(i=0 ; i<4 ; i++){
 		key = kb_service();
@@ -81,12 +103,12 @@ void data_setting_enter(){
 		s += 10.0/powf(10.0,(float)i) * (float)key;
 		HAL_Delay(100);
 	}
+	lcd_clear(&disp);
 	setting_min.temp = s;
 	s=0;
 
 	sprintf((char *)disp.f_line,"Max. temp.: ");
 	sprintf((char *)disp.s_line,"");
-	lcd_clear(&disp);
 	lcd_display(&disp);
 	for(i=0 ; i<4 ; i++){
 		key = kb_service();
@@ -98,10 +120,39 @@ void data_setting_enter(){
 		s += 10.0/powf(10.0,(float)i) * (float)key;
 		HAL_Delay(100);
 	}
+	lcd_clear(&disp);
 	setting_max.temp = s;
 	usart_send_string("Settings saved.");
 }
 
+void data_setting_print(){
+	lcd_clear(&disp);
+	char buf[3];
+
+	sprintf(buf,"%f",setting_min.humid);
+	sprintf((char *)disp.f_line,"Min. hum:");
+	strncat((char *)disp.f_line,buf,5);
+
+	sprintf(buf,"%f",setting_max.humid);
+	sprintf((char *)disp.s_line,"Max. hum:");
+	strncat((char *)disp.s_line,buf,5);
+
+	lcd_display(&disp);
+	HAL_Delay(5000);
+	lcd_clear(&disp);
+
+	sprintf(buf,"%f",setting_min.temp);
+	sprintf((char *)disp.f_line,"Min. temp:");
+	strncat((char *)disp.f_line,buf,5);
+
+	sprintf(buf,"%f",setting_max.temp);
+	sprintf((char *)disp.s_line,"Max. temp:");
+	strncat((char *)disp.s_line,buf,5);
+
+	lcd_display(&disp);
+	HAL_Delay(5000);
+	lcd_clear(&disp);
+}
 
 void get_data(){
 	hts221_read_humid(&(current_data.humid));

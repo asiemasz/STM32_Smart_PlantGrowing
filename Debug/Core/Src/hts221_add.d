@@ -41,7 +41,8 @@ Core/Src/hts221_add.o: ../Core/Src/hts221_add.c ../Core/Inc/hts221_add.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb_reg.h ../Core/Inc/lcd.h \
  ../Core/Inc/i2c.h ../Core/Inc/sensors.h ../Core/Inc/hts221_add.h \
- ../Core/Inc/usart.h ../Core/Inc/tim.h
+ ../Core/Inc/usart.h ../Core/Inc/tim.h ../Core/Inc/eeprom.h \
+ ../Core/Inc/keyboard.h ../Core/Inc/gpio.h
 
 ../Core/Inc/hts221_add.h:
 
@@ -144,3 +145,9 @@ Core/Src/hts221_add.o: ../Core/Src/hts221_add.c ../Core/Inc/hts221_add.h \
 ../Core/Inc/usart.h:
 
 ../Core/Inc/tim.h:
+
+../Core/Inc/eeprom.h:
+
+../Core/Inc/keyboard.h:
+
+../Core/Inc/gpio.h:

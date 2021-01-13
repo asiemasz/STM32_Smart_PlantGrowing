@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include "tim.h"
+#include "eeprom.h"
+#include "keyboard.h"
 
 #define S_OK 0
 #define S_LOWTEMP 1
@@ -42,6 +44,8 @@ void print_alert(int e, struct lcd_disp *disp);
 uint8_t check_data();
 void data_setting_init();
 void data_setting_enter();
-
+void data_setting_save();
+void data_setting_load();
+void data_setting_print();
 
 #endif /* INC_SENSORS_H_ */
