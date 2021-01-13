@@ -1,0 +1,7 @@
+sensors.c:17:6:data_setting_init	4	static
+sensors.c:24:6:data_setting_enter	32	static
+sensors.c:106:6:get_data	8	static
+sensors.c:112:7:convert_moisture	16	static
+sensors.c:124:6:print_data	48	static
+sensors.c:147:6:print_alert	24	static
+sensors.c:164:9:check_data	4	static
