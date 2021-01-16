@@ -13,7 +13,7 @@
 #include "tim.h"
 
 #define VOLUME 200
-void buzzer_alarm(uint8_t time,uint8_t power);
+void buzzerAlarm(uint8_t time,uint8_t power);
 
 
 #endif /* INC_BUZZER_H_ */

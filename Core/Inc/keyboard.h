@@ -29,7 +29,7 @@ extern uint8_t KB_STATE;
 extern uint8_t KB_KEY;
 
 
-uint8_t kb_read_key();//read what key is pressed
+uint8_t kb_readKey();//read what key is pressed
 uint8_t kb_ascii(uint8_t x);
 uint8_t kb_service();//wait for pressed key
 

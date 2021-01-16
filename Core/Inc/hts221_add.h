@@ -15,8 +15,8 @@
 #include "sensors.h"
 
 int32_t hts221_init();
-int32_t hts221_read_temp(float *temp);
-int32_t hts221_read_humid(float *humid);
+int32_t hts221_readTemp(float *temp);
+int32_t hts221_readHumid(float *humid);
 
 
 #endif /* INC_HTS221_ADD_H_ */

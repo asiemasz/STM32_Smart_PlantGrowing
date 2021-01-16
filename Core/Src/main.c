@@ -56,13 +56,13 @@
 
 /* USER CODE BEGIN PV */
 uint32_t s;
-uint8_t data_status;
+uint8_t dataStatus;
 uint16_t VirtAddVarTab[NB_OF_VAR];
 struct lcd_disp disp;
-uint8_t alert_mode = 0;
-uint8_t setting_mode = 0;
+uint8_t alertMode = 0;
+uint8_t settingMode = 0;
 uint16_t p;
-volatile uint32_t delay_counter = 0;
+volatile uint32_t delayCounter = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -115,13 +115,13 @@ int main(void)
   HAL_SYSTICK_Config(72000);
   hts221_init();
 
-  data_setting_init();
+  data_settingInit();
 
   disp.addr = (0x27 << 1);
   disp.bl = true;
   lcd_init(&disp);
-  sprintf((char *)disp.f_line, "Start ");
-  sprintf((char *) disp.s_line,"programu");
+  sprintf((char *)disp.f_line, "PROGRAM ");
+  sprintf((char *) disp.s_line,"START");
   lcd_display(&disp);
   HAL_Delay(500);
   lcd_clear(&disp);
@@ -136,19 +136,19 @@ int main(void)
 	  sprintf((char *)disp.f_line,"Loading initial ");
 	  sprintf((char *)disp.s_line,"settings.");
 	  lcd_display(&disp);
-	  data_setting_save();
+	  data_settingSave();
 	  HAL_Delay(3000);
 	  lcd_clear(&disp);
-	  data_setting_print();
+	  data_settingPrint();
 
   }
   else{
 	  sprintf((char *)disp.f_line,"Loading settings");
 	  sprintf((char *)disp.s_line,"from memory.");
-	  data_setting_load();
+	  data_settingLoad();
 	  HAL_Delay(3000);
 	  lcd_clear(&disp);
-	  data_setting_print();
+	  data_settingPrint();
   }
 
 
@@ -165,12 +165,12 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	if(setting_mode == 0)
+	if(settingMode == 0)
 		lcd_display(&disp);
 	else{
-		data_setting_enter();
-		data_setting_save();
-		setting_mode = 0;
+		data_settingEnter();
+		data_settingSave();
+		settingMode = 0;
 	}
   }
   /* USER CODE END 3 */
@@ -223,38 +223,38 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM11 ){
-		uint8_t temp_key = kb_read_key();
+		uint8_t tempKey = kb_readKey();
 
-		if(temp_key==0xFF)
+		if(tempKey==0xFF)
 		KB_STATE=KB_STATE_IDLE;
-		else if(temp_key==KB_KEY)
+		else if(tempKey==KB_KEY)
 		KB_STATE=KB_STATE_PRESSED;
 		else{
 		KB_STATE=KB_STATE_WAIT;
-		KB_KEY=temp_key;
+		KB_KEY=tempKey;
 		}
 		if(KB_STATE == KB_STATE_PRESSED && KB_KEY==KB_HASH)
-			setting_mode = 1;
+			settingMode = 1;
 	}
 
 
 	if(htim->Instance == TIM2){
-		if(setting_mode)
+		if(settingMode)
 			return;
-		get_data();
-		data_status = check_data();
-		if(data_status == S_OK){
-			print_data(&disp);
+		data_get();
+		dataStatus = data_check();
+		if(dataStatus == S_OK){
+			data_print(&disp);
 		}
 		else{
-			if(alert_mode == 1){
-				print_alert((int)data_status,&disp);
-				buzzer_alarm(1, 200);
-				alert_mode = 0;
+			if(alertMode == 1){
+				data_printAlert((int)dataStatus,&disp);
+				buzzerAlarm(1, 200);
+				alertMode = 0;
 			}
-			else if(alert_mode == 0 ){
-				print_data(&disp);
-				alert_mode = 1;
+			else if(alertMode == 0 ){
+				data_print(&disp);
+				alertMode = 1;
 			}
 		}
 

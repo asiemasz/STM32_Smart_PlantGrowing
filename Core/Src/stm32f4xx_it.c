@@ -187,8 +187,8 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
   /* USER CODE BEGIN SysTick_IRQn 0 */
-	if(delay_counter){
-		if(--delay_counter == 0)
+	if(delayCounter){
+		if(--delayCounter == 0)
 			HAL_TIM_PWM_Stop(&htim3,TIM_CHANNEL_1);
 	}
   /* USER CODE END SysTick_IRQn 0 */

@@ -78,7 +78,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 extern uint32_t s;
 extern struct lcd_disp disp;
-extern volatile uint32_t delay_counter;
+extern volatile uint32_t delayCounter;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

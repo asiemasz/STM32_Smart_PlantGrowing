@@ -17,7 +17,7 @@ const unsigned char kbMap[4][3]={{1, 2, 3},
 const uint16_t kbRows[4] = {KB_R1_Pin, KB_R2_Pin, KB_R3_Pin, KB_R4_Pin};
 const uint16_t kbCols[3] = {KB_C1_Pin,KB_C2_Pin,KB_C3_Pin};
 
-uint8_t kb_read_key(){
+uint8_t kb_readKey(){
 	uint8_t r,c;
 	for(r=0;r<4;r++){
 		HAL_GPIO_WritePin(KB_PORT, KB_R1_Pin|KB_R2_Pin|KB_R3_Pin|KB_R4_Pin, GPIO_PIN_SET);

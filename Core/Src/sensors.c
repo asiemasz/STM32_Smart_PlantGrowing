@@ -10,40 +10,40 @@ const uint8_t dry_val = 20;
 const uint8_t wet_val = 160;
 uint8_t intervals;
 
-data current_data;
-data setting_min;
-data setting_max;
+data currentData;
+data settingMin;
+data settingMax;
 
-void data_setting_init(){
-	setting_min.humid = 50.00;
-	setting_min.temp = 18.00;
-	setting_max.humid = 70.00;
-	setting_max.temp = 30.00;
+void data_settingInit(){
+	settingMin.humid = 50.00;
+	settingMin.temp = 18.00;
+	settingMax.humid = 70.00;
+	settingMax.temp = 30.00;
 }
 
-void data_setting_save(){
-	EE_WriteVariable(MIN_HUM_ADDR, (uint16_t) setting_min.humid);
-	EE_WriteVariable(MAX_HUM_ADDR, (uint16_t) setting_max.humid);
-	EE_WriteVariable(MIN_TEMP_ADDR, (uint16_t) setting_min.temp);
-	EE_WriteVariable(MAX_TEMP_ADDR, (uint16_t) setting_max.temp);
+void data_settingSave(){
+	EE_WriteVariable(MIN_HUM_ADDR,  100*settingMin.humid);
+	EE_WriteVariable(MAX_HUM_ADDR, 100*settingMax.humid);
+	EE_WriteVariable(MIN_TEMP_ADDR, 100*settingMin.temp);
+	EE_WriteVariable(MAX_TEMP_ADDR, 100*settingMax.temp);
 }
 
-void data_setting_load(){
+void data_settingLoad(){
 	uint16_t buf;
 	EE_ReadVariable(MIN_HUM_ADDR, &buf);
-	setting_min.humid = (float) buf;
+	settingMin.humid = (float) buf/100.0;
 
 	EE_ReadVariable(MAX_HUM_ADDR, &buf);
-	setting_max.humid = (float) buf;
+	settingMax.humid = (float) buf/100.0;
 
 	EE_ReadVariable(MIN_TEMP_ADDR, &buf);
-	setting_min.temp = (float) buf;
+	settingMin.temp = (float) buf/100.0;
 
 	EE_ReadVariable(MAX_TEMP_ADDR, &buf);
-	setting_max.temp = (float) buf;
+	settingMax.temp = (float) buf/100.0;
 }
 
-void data_setting_enter(){
+void data_settingEnter(){
 	float s=0;
 	char buf[2];
 	uint8_t key;
@@ -70,7 +70,7 @@ void data_setting_enter(){
 		HAL_Delay(100);
 	}
 	lcd_clear(&disp);
-	setting_min.humid = s;
+	settingMin.humid = s;
 	s=0;
 
 	sprintf((char *)disp.f_line,"Max. humid.: ");
@@ -87,7 +87,7 @@ void data_setting_enter(){
 		HAL_Delay(100);
 	}
 	lcd_clear(&disp);
-	setting_max.humid = s;
+	settingMax.humid = s;
 	s=0;
 
 	sprintf((char *)disp.f_line,"Min. temp.: ");
@@ -104,7 +104,7 @@ void data_setting_enter(){
 		HAL_Delay(100);
 	}
 	lcd_clear(&disp);
-	setting_min.temp = s;
+	settingMin.temp = s;
 	s=0;
 
 	sprintf((char *)disp.f_line,"Max. temp.: ");
@@ -121,19 +121,19 @@ void data_setting_enter(){
 		HAL_Delay(100);
 	}
 	lcd_clear(&disp);
-	setting_max.temp = s;
+	settingMax.temp = s;
 	usart_send_string("Settings saved.");
 }
 
-void data_setting_print(){
+void data_settingPrint(){
 	lcd_clear(&disp);
 	char buf[3];
 
-	sprintf(buf,"%f",setting_min.humid);
+	sprintf(buf,"%f",settingMin.humid);
 	sprintf((char *)disp.f_line,"Min. hum:");
 	strncat((char *)disp.f_line,buf,5);
 
-	sprintf(buf,"%f",setting_max.humid);
+	sprintf(buf,"%f",settingMax.humid);
 	sprintf((char *)disp.s_line,"Max. hum:");
 	strncat((char *)disp.s_line,buf,5);
 
@@ -141,11 +141,11 @@ void data_setting_print(){
 	HAL_Delay(5000);
 	lcd_clear(&disp);
 
-	sprintf(buf,"%f",setting_min.temp);
+	sprintf(buf,"%f",settingMin.temp);
 	sprintf((char *)disp.f_line,"Min. temp:");
 	strncat((char *)disp.f_line,buf,5);
 
-	sprintf(buf,"%f",setting_max.temp);
+	sprintf(buf,"%f",settingMax.temp);
 	sprintf((char *)disp.s_line,"Max. temp:");
 	strncat((char *)disp.s_line,buf,5);
 
@@ -154,13 +154,13 @@ void data_setting_print(){
 	lcd_clear(&disp);
 }
 
-void get_data(){
-	hts221_read_humid(&(current_data.humid));
-	hts221_read_temp(&(current_data.temp));
-	current_data.soil = convert_moisture(s);
+void data_get(){
+	hts221_readHumid(&(currentData.humid));
+	hts221_readTemp(&(currentData.temp));
+	currentData.soil = convertMoisture(s);
 }
 
-char* convert_moisture(uint32_t adc_data){
+char* convertMoisture(uint32_t adc_data){
 	intervals = (wet_val-dry_val)/4;
 	if(adc_data < intervals)
 		return "dry";
@@ -172,30 +172,30 @@ char* convert_moisture(uint32_t adc_data){
 		return "very wet";
 }
 
-void print_data(struct lcd_disp *disp){
+void data_print(struct lcd_disp *disp){
 	char arr1[5];
 	char arr2[5];
 	char zeros[8] = "        ";
-	gcvt(current_data.humid,4,arr1);
-	gcvt(current_data.temp,4,arr2);
+	gcvt(currentData.humid,4,arr1);
+	gcvt(currentData.temp,4,arr2);
 
 	sprintf((char *)disp->f_line, "H:");
 	strncat(disp->f_line, arr1,5);
 	strncat(disp->f_line,"  T:",4);
 	strncat(disp->f_line,arr2,5);
 	sprintf((char *)disp->s_line, "Soil: ");
-	strncat(disp->s_line,current_data.soil,strlen(current_data.soil));
-	strncat(disp->s_line,zeros,16-6-strlen(current_data.soil));
+	strncat(disp->s_line,currentData.soil,strlen(currentData.soil));
+	strncat(disp->s_line,zeros,16-6-strlen(currentData.soil));
 	usart_send_string("Hum: ");
 	usart_send_string(arr1);
 	usart_send_string("    Temp: ");
 	usart_send_string(arr2);
 	usart_send_string("    Soil: ");
-	usart_send_string(current_data.soil);
+	usart_send_string(currentData.soil);
 	usart_send_string("\n\r");
 }
 
-void print_alert(int e, struct lcd_disp *disp){
+void data_printAlert(int e, struct lcd_disp *disp){
 	sprintf((char *)disp->f_line, "ALERT!          ");
 	switch(e){
 	case S_HIGHTEMP:
@@ -212,14 +212,14 @@ void print_alert(int e, struct lcd_disp *disp){
 	usart_send_string("\n\r");
 }
 
-uint8_t check_data(){
-	if(current_data.temp > setting_max.temp)
+uint8_t data_check(){
+	if(currentData.temp > settingMax.temp)
 		return S_HIGHTEMP;
-	if(current_data.temp < setting_min.temp)
+	if(currentData.temp < settingMin.temp)
 		return S_LOWTEMP;
-	if(current_data.humid > setting_max.humid)
+	if(currentData.humid > settingMax.humid)
 		return S_HIGHHUM;
-	if(current_data.humid < setting_min.humid)
+	if(currentData.humid < settingMin.humid)
 		return S_LOWHUM;
 	return S_OK;
 }
