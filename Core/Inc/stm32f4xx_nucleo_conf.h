@@ -1,10 +1,4 @@
-/**
-  ******************************************************************************
-  * @file           : stm32f4xx_nucleo_conf.h
-  * @brief          : Configuration file
-  ******************************************************************************
-  ******************************************************************************
-*/
+
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef STM32F4XX_NUCLEO_CONF_H
@@ -16,21 +10,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 
-/** @addtogroup BSP
-  * @{
-  */
 
-/** @addtogroup STM32F4XX_NUCLEO
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_CONFIG Config
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_CONFIG_Exported_Constants
-  * @{
-  */
 /* COM Feature define */
 #define USE_BSP_COM_FEATURE                 0U
 
@@ -48,21 +28,6 @@
 
 /* UART1 Baud rate in bps  */
 #define BUS_UART1_BAUDRATE                  9600U /* baud rate of UARTn = 9600 baud */
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 
 #ifdef __cplusplus
 }

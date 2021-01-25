@@ -1,9 +1,8 @@
-/*
- * lcd.h
- *
- *  Created on: Nov 2, 2020
- *      Author: Adam Siemasz
+/**
+ * @file inc/lcd.h
+ * @brief Header file for lcd.c file. This file contains macros to work with LCD screen by I2C and LCD display structure.
  */
+
 
 #ifndef INC_LCD_H_
 #define INC_LCD_H_
@@ -13,7 +12,13 @@
 #include "stm32f4xx_hal.h"
 #include <stdbool.h>
 
+
 #define HI2C hi2c3
+
+/**
+ * @addtogroup LCD
+ * @{
+ */
 
 #define RS_PIN 0x01
 #define RW_PIN 0x02
@@ -32,13 +37,21 @@
 
 #define LINE_1 0x80
 #define LINE_2 0xC0
-
+/**
+ * \struct
+ */
+/**
+ * @brief LCD display structure
+ */
 struct lcd_disp {
-	uint8_t addr;
-	char f_line[17];
-	char s_line[17];
-	bool bl;
+	uint8_t addr; /**< address of I2C slave */
+	char f_line[17];/**< contains first line of LCD message */
+	char s_line[17];/**< contains second line of LCD message */
+	bool bl; /**< indicates if background lighting should be enabled */
 };
+/**
+ * @}
+ */
 
 void lcd_init(struct lcd_disp * lcd);
 void lcd_write(uint8_t addr, uint8_t data, uint8_t xpin);

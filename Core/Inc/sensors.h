@@ -1,8 +1,6 @@
-/*
- * sensors.h
- *
- *  Created on: 5 lis 2020
- *      Author: pajcz
+/**
+ * @file inc/sensors.h
+ * @brief Header for sensors.c file. Contains macros defining data state and structure for containing data.
  */
 
 #ifndef INC_SENSORS_H_
@@ -19,17 +17,44 @@
 #include "eeprom.h"
 #include "keyboard.h"
 
+/**
+ * @addtogroup SENSORS_DATA_MANAGE
+ * @{
+ */
+/**
+ * @brief all data meet up with requirements
+ */
 #define S_OK 0
+/**
+ * @brief temperature too low!
+ */
 #define S_LOWTEMP 1
+/**
+ * @brief temperature too high!
+ */
 #define S_HIGHTEMP 2
+/**
+ * @brief air humidity too low!
+ */
 #define S_LOWHUM 3
+/**
+ * @brief air humidity too high!
+ */
 #define S_HIGHHUM 4
-
+/**
+ * \struct
+ */
+/**
+ * @brief contains set of data from sensors
+ */
 typedef struct {
 	float temp;
 	float humid;
 	char* soil;
 }data;
+/**
+ * @}
+ */
 
 extern data currentData;
 extern data settingMin;

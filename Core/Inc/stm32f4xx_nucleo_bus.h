@@ -1,20 +1,4 @@
-/**
-  ******************************************************************************
-  * @file           : stm32f4xx_nucleo_bus.h
-  * @brief          : header file for the BSP BUS IO driver
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
-  *
-  ******************************************************************************
-*/
+
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef STM32F4XX_NUCLEO_BUS_H
@@ -28,21 +12,7 @@
 #include "stm32f4xx_nucleo_conf.h"
 #include "stm32f4xx_nucleo_errno.h"
 
-/** @addtogroup BSP
-  * @{
-  */
 
-/** @addtogroup STM32F4XX_NUCLEO
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS STM32F4XX_NUCLEO BUS
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS_Exported_Constants STM32F4XX_NUCLEO BUS Exported Constants
-  * @{
-  */
 
 #define BUS_I2C1_INSTANCE I2C1
 #define BUS_I2C1_SCL_GPIO_PORT GPIOB
@@ -64,13 +34,6 @@
    #define BUS_I2C1_FREQUENCY  1000000U /* Frequency of I2Cn = 100 KHz*/
 #endif
 
-/**
-  * @}
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS_Private_Types STM32F4XX_NUCLEO BUS Private types
-  * @{
-  */
 #if (USE_HAL_I2C_REGISTER_CALLBACKS == 1U)
 typedef struct
 {
@@ -78,23 +41,11 @@ typedef struct
   pI2C_CallbackTypeDef  pMspDeInitCb;
 }BSP_I2C_Cb_t;
 #endif /* (USE_HAL_I2C_REGISTER_CALLBACKS == 1U) */
-/**
-  * @}
-  */
 
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Exported_Variables LOW LEVEL Exported Constants
-  * @{
-  */
 
 extern I2C_HandleTypeDef hi2c1;
 
-/**
-  * @}
-  */
 
-/** @addtogroup STM32F4XX_NUCLEO_BUS_Exported_Functions
-  * @{
-  */
 
 /* BUS IO driver over I2C Peripheral */
 HAL_StatusTypeDef MX_I2C1_Init(I2C_HandleTypeDef* hi2c);
@@ -115,21 +66,7 @@ int32_t BSP_I2C1_RegisterMspCallbacks (BSP_I2C_Cb_t *Callbacks);
 
 int32_t BSP_GetTick(void);
 
-/**
-  * @}
-  */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 #ifdef __cplusplus
 }
 #endif
