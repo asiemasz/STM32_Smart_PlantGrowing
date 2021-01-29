@@ -1,4 +1,4 @@
-lcd.c:10:6:lcd_init	24	static
-lcd.c:36:6:lcd_write	32	static
-lcd.c:48:6:lcd_display	24	static
-lcd.c:69:6:lcd_clear	24	static
+lcd.c:21:6:lcd_init	24	static
+lcd.c:53:6:lcd_write	32	static
+lcd.c:70:6:lcd_display	24	static
+lcd.c:95:6:lcd_clear	24	static

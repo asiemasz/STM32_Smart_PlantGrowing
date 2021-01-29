@@ -143,6 +143,8 @@ uint8_t usart_receive_char(){
 	HAL_UART_Receive(&huart2, (uint8_t*) &ch, 1, USART_TIMEOUT);
 	return ch;
 }
+
+
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

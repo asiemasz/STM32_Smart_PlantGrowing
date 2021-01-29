@@ -81,7 +81,7 @@ uint8_t dataStatus; /*!< status of current data */
 uint16_t VirtAddVarTab[NB_OF_VAR]; /*!< Table of virtual adresses for EEPROM emulation */
 struct lcd_disp disp; /*!< LCD display struct used in program*/
 uint8_t alertMode = 0; /*!< Alert mode: 1 - alert on; 0 - alert off */
-uint8_t settingMode = 0;/*!< Setting mode: 1 - enable settings input mode */
+uint8_t settingModeKb = 0,settingModeUart = 0;/*!< Setting mode: 1 - enable settings input mode */
 uint16_t p; /*!< Variable storing data readed from EEPROM emulation */
 volatile uint32_t delayCounter = 0; /*!< Counter of SysTick handler */
 /* USER CODE END PV */
@@ -186,12 +186,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	if(settingMode == 0)
+	if(settingModeKb == 0 && settingModeUart == 0)
 		lcd_display(&disp);
-	else{
+	else if(settingModeKb == 1){
 		data_settingEnter();
 		data_settingSave();
-		settingMode = 0;
+		settingModeKb = 0;
+	}
+	else{
+		usart_send_string("DZIALA");
+		settingModeUart = 0;
 	}
   }
   /* USER CODE END 3 */
@@ -267,12 +271,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		KB_KEY=tempKey;
 		}
 		if(KB_STATE == KB_STATE_PRESSED && KB_KEY==KB_HASH)
-			settingMode = 1;
+			settingModeKb = 1;
+		else if(__HAL_UART_GET_FLAG(&huart2,UART_FLAG_RXNE)) {
+			settingModeUart = 1;
+			__HAL_UART_CLEAR_FLAG(&huart2, UART_FLAG_RXNE);
+		}
 	}
 
 
 	if(htim->Instance == TIM2){
-		if(settingMode)
+		if(settingModeKb || settingModeUart)
 			return;
 		data_get();
 		dataStatus = data_check();
