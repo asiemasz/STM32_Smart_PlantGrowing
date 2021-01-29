@@ -139,11 +139,23 @@ HAL_StatusTypeDef usart_send_string(char *s){
 uint8_t usart_receive_char(){
 	uint8_t ch;
 	while(!__HAL_UART_GET_FLAG(&huart2, UART_FLAG_RXNE));
-
 	HAL_UART_Receive(&huart2, (uint8_t*) &ch, 1, USART_TIMEOUT);
 	return ch;
 }
-
+/**
+ * @brief enter new settings using uart communication
+ * @param None.
+ * @retval None.1
+ */
+void usart_settingEnter(){
+	char data[4];
+	char buf[100];
+	usart_send_string("Setting mode. Please enter data in format xx.x .\r\n");
+	usart_send_string("Please enter minimum humidity: ");
+	HAL_StatusTypeDef stat = HAL_UART_Receive(&huart2, (uint8_t*)data, 4, 10000);
+	float x = strtof(data, NULL);
+	usart_send_string("\r\n");
+}
 
 /* USER CODE END 1 */
 

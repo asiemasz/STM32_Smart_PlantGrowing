@@ -4,3 +4,4 @@ usart.c:83:6:HAL_UART_MspDeInit	16	static
 usart.c:118:19:usart_send_char	24	static
 usart.c:130:19:usart_send_string	24	static
 usart.c:139:9:usart_receive_char	16	static
+usart.c:150:6:usart_settingEnter	120	static

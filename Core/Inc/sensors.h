@@ -72,4 +72,5 @@ void data_settingSave();
 void data_settingLoad();
 void data_settingPrint();
 
+
 #endif /* INC_SENSORS_H_ */

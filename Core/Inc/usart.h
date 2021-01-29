@@ -11,9 +11,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
 /* USER CODE BEGIN Includes */
-#include "string.h"
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "sensors.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart2;
@@ -28,6 +30,7 @@ void MX_USART2_UART_Init(void);
 HAL_StatusTypeDef usart_send_string(char *s);
 HAL_StatusTypeDef usart_send_char(char ch);
 uint8_t usart_receive_char();
+void usart_settingEnter();
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

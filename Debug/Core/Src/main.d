@@ -32,9 +32,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/dma.h ../Core/Inc/i2c.h \
- ../Core/Inc/tim.h ../Core/Inc/usart.h ../Core/Inc/gpio.h \
- ../Core/Inc/eeprom.h ../Core/Inc/hts221_add.h \
- ../Drivers/BSP/Components/hts221/hts221.h \
+ ../Core/Inc/tim.h ../Core/Inc/usart.h ../Core/Inc/sensors.h \
+ ../Core/Inc/hts221_add.h ../Drivers/BSP/Components/hts221/hts221.h \
  ../Drivers/BSP/Components/hts221/hts221_reg.h \
  ../Drivers/BSP/IKS01A2/iks01a2_env_sensors.h \
  ../X-CUBE-MEMS1/Target/iks01a2_conf.h ../Core/Inc/stm32f4xx_nucleo_bus.h \
@@ -43,10 +42,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/BSP/Components/Common/env_sensor.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb.h \
  ../Drivers/BSP/Components/lps22hb/lps22hb_reg.h ../Core/Inc/lcd.h \
- ../Core/Inc/i2c.h ../Core/Inc/sensors.h ../Core/Inc/hts221_add.h \
- ../Core/Inc/usart.h ../Core/Inc/tim.h ../Core/Inc/eeprom.h \
- ../Core/Inc/keyboard.h ../Core/Inc/gpio.h ../Core/Inc/lcd.h \
- ../Core/Inc/buzzer.h ../Core/Inc/keyboard.h ../Core/Inc/sensors.h
+ ../Core/Inc/i2c.h ../Core/Inc/usart.h ../Core/Inc/tim.h \
+ ../Core/Inc/eeprom.h ../Core/Inc/keyboard.h ../Core/Inc/gpio.h \
+ ../Core/Inc/gpio.h ../Core/Inc/eeprom.h ../Core/Inc/hts221_add.h \
+ ../Core/Inc/lcd.h ../Core/Inc/buzzer.h ../Core/Inc/keyboard.h \
+ ../Core/Inc/sensors.h
 
 ../Core/Inc/main.h:
 
@@ -126,9 +126,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/usart.h:
 
-../Core/Inc/gpio.h:
-
-../Core/Inc/eeprom.h:
+../Core/Inc/sensors.h:
 
 ../Core/Inc/hts221_add.h:
 
@@ -158,10 +156,6 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/i2c.h:
 
-../Core/Inc/sensors.h:
-
-../Core/Inc/hts221_add.h:
-
 ../Core/Inc/usart.h:
 
 ../Core/Inc/tim.h:
@@ -171,6 +165,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/keyboard.h:
 
 ../Core/Inc/gpio.h:
+
+../Core/Inc/gpio.h:
+
+../Core/Inc/eeprom.h:
+
+../Core/Inc/hts221_add.h:
 
 ../Core/Inc/lcd.h:
 

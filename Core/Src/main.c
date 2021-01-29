@@ -194,7 +194,7 @@ int main(void)
 		settingModeKb = 0;
 	}
 	else{
-		usart_send_string("DZIALA");
+		usart_settingEnter();
 		settingModeUart = 0;
 	}
   }
@@ -253,7 +253,7 @@ void SystemClock_Config(void)
  * 			if button pressed for more than timer period KB_STATE_PRESSED
  * 			else KB_STATE_WAIT
  *
- * 			if "#" pressed activate settings mode
+ * 			if "#" on keyboard or any key on PC pressed activate settings mode
  * 	TIM2 - get data from sensors, check if data match requirements
  * 		if yes send data to LCD
  * 		if no alternately send data to LCD and send alarm message to LCD and activate alarm
