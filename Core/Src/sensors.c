@@ -1,19 +1,26 @@
-/*
- * sensors.c
- *
- *  Created on: 5 lis 2020
- *      Author: pajcz
+/**
+ * @file src/sensors.c
+ * @brief This file contains all functions to manage the sensors data and device's settings
  */
+/**
+ * @addtogroup SENSORS_DATA_MANAGE
+ * @{
+ */
+
 #include "sensors.h"
 
-const uint8_t dry_val = 20;
-const uint8_t wet_val = 160;
-uint8_t intervals;
+const uint8_t dry_val = 20; /*!< variable storing totally dry soil moisture vailue from ADC sensor */
+const uint8_t wet_val = 160;/*!< variable storing totally wet soil moisture vailue from ADC sensor */
 
-data currentData;
-data settingMin;
-data settingMax;
+data currentData; /*!< current data from sensors */
+data settingMin;/*!< minimal sensors readings values */
+data settingMax;/*!< maximal sensors readings values */
 
+/**
+ * @brief initialize data settings after first device launch
+ * @param None.
+ * @retval None.
+ */
 void data_settingInit(){
 	settingMin.humid = 50.00;
 	settingMin.temp = 18.00;
@@ -21,6 +28,11 @@ void data_settingInit(){
 	settingMax.temp = 30.00;
 }
 
+/**
+ * @brief save data settings from settingMin and settingMax structures to EEPROM memory emulation
+ * @param None.
+ * @retval None.
+ */
 void data_settingSave(){
 	EE_WriteVariable(MIN_HUM_ADDR,  100*settingMin.humid);
 	EE_WriteVariable(MAX_HUM_ADDR, 100*settingMax.humid);
@@ -28,6 +40,11 @@ void data_settingSave(){
 	EE_WriteVariable(MAX_TEMP_ADDR, 100*settingMax.temp);
 }
 
+/**
+ * @brief load data settings from EEPROM memory emulation to settingMax and settingMin structures
+ * @param None.
+ * @retval None.
+ */
 void data_settingLoad(){
 	uint16_t buf;
 	EE_ReadVariable(MIN_HUM_ADDR, &buf);
@@ -43,6 +60,11 @@ void data_settingLoad(){
 	settingMax.temp = (float) buf/100.0;
 }
 
+/**
+ * @brief enter new data setting to settings structures using keyboard input
+ * @param None.
+ * @retval None.
+ */
 void data_settingEnter(){
 	float s=0;
 	char buf[2];
@@ -124,6 +146,11 @@ void data_settingEnter(){
 	settingMax.temp = s;
 	usart_send_string("Settings saved.");
 }
+/**
+ * @brief print current data settings on LCD display
+ * @param None.
+ * @retval None.
+ */
 
 void data_settingPrint(){
 	lcd_clear(&disp);
@@ -153,15 +180,28 @@ void data_settingPrint(){
 	HAL_Delay(5000);
 	lcd_clear(&disp);
 }
+/**
+ * @brief save actual sensors' data values to currentData structure
+ * @param None.
+ * @retval None.
+ */
 
 void data_get(){
 	hts221_readHumid(&(currentData.humid));
 	hts221_readTemp(&(currentData.temp));
 	currentData.soil = convertMoisture(s);
 }
-
+/**
+ * @brief convert data from ADC sensor to string describing soil moisture
+ * @param adc_data: ADC input reading
+ * @retval string describing soil moisture. Possible values:
+ * 		   - "dry"
+ * 		   - "little wet"
+ * 		   - "wet"
+ * 		   - "very wet"
+ */
 char* convertMoisture(uint32_t adc_data){
-	intervals = (wet_val-dry_val)/4;
+	uint8_t intervals = (wet_val-dry_val)/4;
 	if(adc_data < intervals)
 		return "dry";
 	else if(adc_data >= intervals && adc_data < 2*intervals)
@@ -171,7 +211,11 @@ char* convertMoisture(uint32_t adc_data){
 	else
 		return "very wet";
 }
-
+/**
+ * @brief send data from currentData structure to LCD display structure
+ * @param disp: pointer to LCD display structure
+ * @retval None.
+ */
 void data_print(struct lcd_disp *disp){
 	char arr1[5];
 	char arr2[5];
@@ -194,6 +238,12 @@ void data_print(struct lcd_disp *disp){
 	usart_send_string(currentData.soil);
 	usart_send_string("\n\r");
 }
+/**
+ * @brief send appropriate alert message to lcd display structure
+ * @param e: variable describing current data status
+ * @param disp: pointer to LCD display structure
+ * @retval None.
+ */
 
 void data_printAlert(int e, struct lcd_disp *disp){
 	sprintf((char *)disp->f_line, "ALERT!          ");
@@ -211,6 +261,11 @@ void data_printAlert(int e, struct lcd_disp *disp){
 	usart_send_string(disp->s_line);
 	usart_send_string("\n\r");
 }
+/**
+ * @brief check if values from currentData structure comply with settings
+ * @param None.
+ * @retval variable describing current data status
+ */
 
 uint8_t data_check(){
 	if(currentData.temp > settingMax.temp)

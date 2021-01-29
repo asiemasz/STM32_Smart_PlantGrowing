@@ -1,8 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
+  * @file           src/main.c
+  * @brief          Main program body
   ******************************************************************************
   * @attention
   *
@@ -15,6 +15,27 @@
   *                        opensource.org/licenses/BSD-3-Clause
   *
   ******************************************************************************
+  */
+/*! \mainpage My Personal Index Page
+ *
+ * \section intro_sec Introduction
+ * Microcontroller project to help in plants growing at home. Device read temperature, air humidity and soil humidity from sensors, stores current readings in special structure and check if it fits limit values. Limit values can be set by user using keyboard and LCD screen. If any of readings is off limit values device alarms user.
+ * \section Hardware
+ *  -STM NUCLEO-F401RE: board
+ *
+ *  -x-NUCLEO-IKS102A: shield with environmental and motion sensors
+ *
+ * -Waveshare 9527: analog soil moisture sensor
+ *
+ * -membrane keyboard 4x3
+ *
+ * -LCD screen: HD44780 driver
+ *
+ * -buzzer with generator module
+ *
+ */
+/** @addtogroup MAIN
+  * @{
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
@@ -55,14 +76,14 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint32_t s;
-uint8_t dataStatus;
-uint16_t VirtAddVarTab[NB_OF_VAR];
-struct lcd_disp disp;
-uint8_t alertMode = 0;
-uint8_t settingMode = 0;
-uint16_t p;
-volatile uint32_t delayCounter = 0;
+uint32_t s; /*!< data from ADC input - DMA*/
+uint8_t dataStatus; /*!< status of current data */
+uint16_t VirtAddVarTab[NB_OF_VAR]; /*!< Table of virtual adresses for EEPROM emulation */
+struct lcd_disp disp; /*!< LCD display struct used in program*/
+uint8_t alertMode = 0; /*!< Alert mode: 1 - alert on; 0 - alert off */
+uint8_t settingMode = 0;/*!< Setting mode: 1 - enable settings input mode */
+uint16_t p; /*!< Variable storing data readed from EEPROM emulation */
+volatile uint32_t delayCounter = 0; /*!< Counter of SysTick handler */
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -132,21 +153,21 @@ int main(void)
 	  Error_Handler();
   }
 
-  if(EE_ReadVariable(MIN_HUM_ADDR, &p) == 1){
-	  sprintf((char *)disp.f_line,"Loading initial ");
-	  sprintf((char *)disp.s_line,"settings.");
+  if(EE_ReadVariable(MIN_HUM_ADDR, &p) == 0){
+	  sprintf((char *)disp.f_line,"Loading settings");
+	  sprintf((char *)disp.s_line,"from memory.");
 	  lcd_display(&disp);
-	  data_settingSave();
+	  data_settingLoad();
 	  HAL_Delay(3000);
 	  lcd_clear(&disp);
 	  data_settingPrint();
-
   }
   else{
-	  sprintf((char *)disp.f_line,"Loading settings");
-	  sprintf((char *)disp.s_line,"from memory.");
-	  data_settingLoad();
-	  HAL_Delay(3000);
+	  data_settingInit();
+	  sprintf((char *)disp.f_line,"Loading initial ");
+	  sprintf((char *)disp.s_line,"settings.");
+	  lcd_display(&disp);
+	  HAL_Delay(1000);
 	  lcd_clear(&disp);
 	  data_settingPrint();
   }
@@ -221,6 +242,18 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+ * @brief Interrupts from TIM11 and TIM2 handlers.
+ * 	TIM11 - check keyboard state
+ * 			if no button pressed KB_STATE_IDLE
+ * 			if button pressed for more than timer period KB_STATE_PRESSED
+ * 			else KB_STATE_WAIT
+ *
+ * 			if "#" pressed activate settings mode
+ * 	TIM2 - get data from sensors, check if data match requirements
+ * 		if yes send data to LCD
+ * 		if no alternately send data to LCD and send alarm message to LCD and activate alarm
+ */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim->Instance == TIM11 ){
 		uint8_t tempKey = kb_readKey();
@@ -249,7 +282,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		else{
 			if(alertMode == 1){
 				data_printAlert((int)dataStatus,&disp);
-				buzzerAlarm(1, 200);
+				buzzerAlarm(1, VOLUME);
 				alertMode = 0;
 			}
 			else if(alertMode == 0 ){

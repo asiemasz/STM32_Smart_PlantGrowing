@@ -1,8 +1,8 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
+  * @file           main.h
+  * @brief          Header for main.c file.
   *                   This file contains the common defines of the application.
   ******************************************************************************
   * @attention
@@ -57,7 +57,10 @@ void Error_Handler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
-
+/**
+ * @addtogroup MAIN
+ * @{
+ */
 /* Private defines -----------------------------------------------------------*/
 #define KB_C2_Pin GPIO_PIN_1
 #define KB_C2_GPIO_Port GPIOA
@@ -75,6 +78,9 @@ void Error_Handler(void);
 #define KB_R2_GPIO_Port GPIOA
 #define KB_R1_Pin GPIO_PIN_12
 #define KB_R1_GPIO_Port GPIOA
+/**
+ * @}
+ */
 /* USER CODE BEGIN Private defines */
 extern uint32_t s;
 extern struct lcd_disp disp;

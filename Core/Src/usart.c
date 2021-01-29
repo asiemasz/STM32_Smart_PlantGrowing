@@ -16,6 +16,10 @@
   *
   ******************************************************************************
   */
+/**
+ * @file src/usart.c
+ * @brief This file contains functions to comunicate with computer via UART.
+ */
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
@@ -98,18 +102,40 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
   /* USER CODE END USART2_MspDeInit 1 */
   }
 }
-
+/**
+ * @addtogroup UART_COMMUNICATION
+ * @{
+ */
 /* USER CODE BEGIN 1 */
-
+/**
+ * @brief send a single char via UART
+ * @param ch: char to send via UART
+ * @retval - 0x00U: HAL_OK - data sent correctly
+ * 		   - 0x01U: HAL_ERROR - error during UART transmition
+ * 		   - 0x02U: HAL_BUSY - UART busy
+ * 		   - 0x03U: HAL_TIMEOUT - UART transmition lasted too long
+ */
 HAL_StatusTypeDef usart_send_char(char ch){
 	HAL_StatusTypeDef result = HAL_UART_Transmit(&huart2, (uint8_t*) &ch, 1, USART_TIMEOUT);
 	return result;
 }
-
+/**
+ * @brief send a string via UART
+ * @param s: string to send via UART
+ * @retval - 0x00U: HAL_OK - data sent correctly
+ * 		   - 0x01U: HAL_ERROR - error during UART transmition
+ * 		   - 0x02U: HAL_BUSY - UART busy
+ * 		   - 0x03U: HAL_TIMEOUT - UART transmition lasted too long
+ */
 HAL_StatusTypeDef usart_send_string(char *s){
 	HAL_StatusTypeDef result = HAL_UART_Transmit(&huart2, (uint8_t*)s, strlen(s), USART_TIMEOUT);
 	return result;
 }
+/**
+ * @brief receive a char via UART
+ * @param None.
+ * @retval char sent from UART to device
+ */
 uint8_t usart_receive_char(){
 	uint8_t ch;
 	while(!__HAL_UART_GET_FLAG(&huart2, UART_FLAG_RXNE));

@@ -1,63 +1,20 @@
-/**
-  ******************************************************************************
-  * @file           : stm32f4xx_nucleo_bus.c
-  * @brief          : source file for the BSP BUS IO driver
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under Ultimate Liberty license
-  * SLA0044, the "License"; You may not use this file except in compliance with
-  * the License. You may obtain a copy of the License at:
-  *                             www.st.com/SLA0044
-  *
-  ******************************************************************************
-*/
+
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_nucleo_bus.h"
 
 __weak HAL_StatusTypeDef MX_I2C1_Init(I2C_HandleTypeDef* hi2c);
 
-/** @addtogroup BSP
-  * @{
-  */
-
-/** @addtogroup STM32F4XX_NUCLEO
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS STM32F4XX_NUCLEO BUS
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS_Exported_Variables BUS Exported Variables
-  * @{
-  */
 
 I2C_HandleTypeDef hi2c1;
-/**
-  * @}
-  */
 
-/** @defgroup STM32F4XX_NUCLEO_BUS_Private_Variables BUS Private Variables
-  * @{
-  */
 
 #if (USE_HAL_I2C_REGISTER_CALLBACKS == 1U)
 static uint32_t IsI2C1MspCbValid = 0;
 #endif /* USE_HAL_I2C_REGISTER_CALLBACKS */
 static uint32_t I2C1InitCounter = 0;
 
-/**
-  * @}
-  */
 
-/** @defgroup STM32F4XX_NUCLEO_BUS_Private_FunctionPrototypes  BUS Private Function
-  * @{
-  */
 
 static void I2C1_MspInit(I2C_HandleTypeDef* hI2c);
 static void I2C1_MspDeInit(I2C_HandleTypeDef* hI2c);
@@ -67,26 +24,13 @@ static void Compute_PRESC_SCLDEL_SDADEL(uint32_t clock_src_freq, uint32_t I2C_Sp
 static uint32_t Compute_SCLL_SCLH (uint32_t clock_src_freq, uint32_t I2C_speed);
 #endif
 
-/**
-  * @}
-  */
 
-/** @defgroup STM32F4XX_NUCLEO_LOW_LEVEL_Private_Functions STM32F4XX_NUCLEO LOW LEVEL Private Functions
-  * @{
-  */
-
-/** @defgroup STM32F4XX_NUCLEO_BUS_Exported_Functions STM32F4XX_NUCLEO_BUS Exported Functions
-  * @{
-  */
 
 /* BUS IO driver over I2C Peripheral */
 /*******************************************************************************
                             BUS OPERATIONS OVER I2C
 *******************************************************************************/
-/**
-  * @brief  Initialize I2C HAL
-  * @retval BSP status
-  */
+
 int32_t BSP_I2C1_Init(void)
 {
 
@@ -127,10 +71,7 @@ int32_t BSP_I2C1_Init(void)
   return ret;
 }
 
-/**
-  * @brief  DeInitialize I2C HAL.
-  * @retval BSP status
-  */
+
 int32_t BSP_I2C1_DeInit(void)
 {
   int32_t ret = BSP_ERROR_NONE;
@@ -153,12 +94,7 @@ int32_t BSP_I2C1_DeInit(void)
   return ret;
 }
 
-/**
-  * @brief  Check whether the I2C bus is ready.
-  * @param DevAddr : I2C device address
-  * @param Trials : Check trials number
-  *	@retval BSP status
-  */
+
 int32_t BSP_I2C1_IsReady(uint16_t DevAddr, uint32_t Trials)
 {
   int32_t ret = BSP_ERROR_NONE;
@@ -171,14 +107,7 @@ int32_t BSP_I2C1_IsReady(uint16_t DevAddr, uint32_t Trials)
   return ret;
 }
 
-/**
-  * @brief  Write a value in a register of the device through BUS.
-  * @param  DevAddr Device address on Bus.
-  * @param  Reg    The target register address to write
-  * @param  pData  Pointer to data buffer to write
-  * @param  Length Data Length
-  * @retval BSP status
-  */
+
 
 int32_t BSP_I2C1_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
 {
@@ -198,14 +127,7 @@ int32_t BSP_I2C1_WriteReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16
   return ret;
 }
 
-/**
-  * @brief  Read a register of the device through BUS
-  * @param  DevAddr Device address on Bus.
-  * @param  Reg    The target register address to read
-  * @param  pData  Pointer to data buffer to read
-  * @param  Length Data Length
-  * @retval BSP status
-  */
+
 int32_t  BSP_I2C1_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
 {
   int32_t ret = BSP_ERROR_NONE;
@@ -224,16 +146,7 @@ int32_t  BSP_I2C1_ReadReg(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16
   return ret;
 }
 
-/**
 
-  * @brief  Write a value in a register of the device through BUS.
-  * @param  DevAddr Device address on Bus.
-  * @param  Reg    The target register address to write
-
-  * @param  pData  Pointer to data buffer to write
-  * @param  Length Data Length
-  * @retval BSP statu
-  */
 int32_t BSP_I2C1_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
 {
   int32_t ret = BSP_ERROR_NONE;
@@ -252,13 +165,7 @@ int32_t BSP_I2C1_WriteReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint
   return ret;
 }
 
-/**
-  * @brief  Read registers through a bus (16 bits)
-  * @param  DevAddr: Device address on BUS
-  * @param  Reg: The target register address to read
-  * @param  Length Data Length
-  * @retval BSP status
-  */
+
 int32_t  BSP_I2C1_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint16_t Length)
 {
   int32_t ret = BSP_ERROR_NONE;
@@ -277,13 +184,7 @@ int32_t  BSP_I2C1_ReadReg16(uint16_t DevAddr, uint16_t Reg, uint8_t *pData, uint
   return ret;
 }
 
-/**
-  * @brief  Send an amount width data through bus (Simplex)
-  * @param  DevAddr: Device address on Bus.
-  * @param  pData: Data pointer
-  * @param  Length: Data length
-  * @retval BSP status
-  */
+
 int32_t BSP_I2C1_Send(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
   int32_t ret = BSP_ERROR_NONE;
 
@@ -302,13 +203,7 @@ int32_t BSP_I2C1_Send(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
   return ret;
 }
 
-/**
-  * @brief  Receive an amount of data through a bus (Simplex)
-  * @param  DevAddr: Device address on Bus.
-  * @param  pData: Data pointer
-  * @param  Length: Data length
-  * @retval BSP status
-  */
+
 int32_t BSP_I2C1_Recv(uint16_t DevAddr, uint8_t *pData, uint16_t Length) {
   int32_t ret = BSP_ERROR_NONE;
 
@@ -380,10 +275,7 @@ int32_t BSP_I2C1_RegisterMspCallbacks (BSP_I2C_Cb_t *Callbacks)
 }
 #endif /* USE_HAL_I2C_REGISTER_CALLBACKS */
 
-/**
-  * @brief  Return system tick in ms
-  * @retval Current HAL time base time stamp
-  */
+
 int32_t BSP_GetTick(void) {
   return HAL_GetTick();
 }
@@ -464,19 +356,5 @@ static void I2C1_MspDeInit(I2C_HandleTypeDef* i2cHandle)
   /* USER CODE END I2C1_MspDeInit 1 */
 }
 
-/**
-  * @}
-  */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

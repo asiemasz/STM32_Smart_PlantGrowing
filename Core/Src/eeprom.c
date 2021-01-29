@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    EEPROM/EEPROM_Emulation/src/eeprom.c
+  * @file    src/eeprom.c
   * @author  MCD Application Team
   * @brief   This file provides all the EEPROM emulation firmware functions.
   ******************************************************************************
@@ -55,10 +55,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* Global variable used to store variable value in read sequence */
-uint16_t DataVar = 0;
+uint16_t DataVar = 0; /*!< global variable used to store variable value in read sequence */
 
 /* Virtual address defined by the user: 0xFFFF value is prohibited */
-extern uint16_t VirtAddVarTab[NB_OF_VAR];
+extern uint16_t VirtAddVarTab[NB_OF_VAR]; /*!< virtual address defined by the user */
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -72,7 +72,8 @@ static uint16_t EE_VerifyPageFullyErased(uint32_t Address);
   * @brief  Restore the pages to a known good state in case of page's status
   *   corruption after a power loss.
   * @param  None.
-  * @retval - Flash error code: on write Flash error
+  * @retval	Success or error status:
+  * 		- Flash error code: on write Flash error
   *         - FLASH_COMPLETE: on success
   */
 uint16_t EE_Init(void)

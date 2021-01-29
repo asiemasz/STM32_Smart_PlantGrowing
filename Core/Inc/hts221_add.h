@@ -1,8 +1,6 @@
-/*
- * hts221_add.h
- *
- *  Created on: Dec 6, 2020
- *      Author: pajcz
+/**
+ * @file inc/hts221_add.h
+ * @brief Header for hts221_add.c file.
  */
 
 #ifndef INC_HTS221_ADD_H_
